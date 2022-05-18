@@ -44,6 +44,6 @@ if len(mygame.PublicCard) != 0:
 print('Your Card:', [card.name for card in mygame.PlayerCard], 'Player Bet:', mygame.Player.bet)
 print('='*60)
 
-print('Game over! You', 'won' if mygame.result >=0 else 'lost', mygame.result)
+print('Game over!', 'You won' if mygame.result >=0 else 'You lost', abs(mygame.result))
 
 

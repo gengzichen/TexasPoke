@@ -24,6 +24,7 @@ class Game(object):
         self.Deck = Deck()
         self.t = int(time.time())
         self.Deck.shuffle(self.t)
+        self.Deck.shuffle(self.t)
         # Pre bet part, this part is fixed
         self.Player.Bet(10)
         self.Dealer.Bet(2*10)
@@ -35,8 +36,11 @@ class Game(object):
         self.actions = ['fold', 'call', 'minBet', 'allIn', 'bet']
     
     def feasible_action(self):
+
         if self.end:
             self.actions = []
+        elif self.state == 'ShowHand':
+            self.actions = ['check']
         # no coin has to give up
         elif self.Player.coin < self.minBet:
             self.actions = ['fold']
@@ -49,7 +53,7 @@ class Game(object):
     def give_up(self):
         # if dealer fold:
         print('Bot folded, you won')
-        print(self.Player.bet, self.Dealer.bet, self.Pot)
+        self.result = self.Player.bet + self.Dealer.bet + self.Pot
         self.Player.coin += self.Player.bet + self.Dealer.bet + self.Pot
         self.Pot = 0
         self.Player.bet = 0
@@ -58,6 +62,7 @@ class Game(object):
         self.end = True
         self.Player.over = False
         self.Dealer.over = False
+        
 
     def play(self, action:str, bet:int):            
         if action == 'fold':
@@ -70,13 +75,11 @@ class Game(object):
 
         if self.state == 'Blind':
             # Bet not over, continue to add
-            print(1)
             if not self.Dealer.over and not self.Player.over:
-                print(2)
                 self.Player.action(action, self.Dealer.bet, bet)
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Player.over == False:
-                    self.Dealer.action(self.DealerCard, self.PublicCard, self.minBet)
+                    self.Dealer.action(self.DealerCard, self.PublicCard, max([10,self.minBet]))
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
@@ -102,13 +105,11 @@ class Game(object):
 
         elif self.state == 'Flop':
             # Bet not over, continue to add
-            print(1)
             if not self.Dealer.over and not self.Player.over:
-                print(2)
                 self.Player.action(action, self.Dealer.bet, bet)
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Player.over == False:
-                    self.Dealer.action(self.DealerCard, self.PublicCard, self.minBet)
+                    self.Dealer.action(self.DealerCard, self.PublicCard, max([10,self.minBet]))
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
@@ -134,13 +135,11 @@ class Game(object):
 
         elif self.state == 'Turn':
             # Bet not over, continue to add
-            print(1)
             if not self.Dealer.over and not self.Player.over:
-                print(2)
                 self.Player.action(action, self.Dealer.bet, bet)
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Player.over == False:
-                    self.Dealer.action(self.DealerCard, self.PublicCard, self.minBet)
+                    self.Dealer.action(self.DealerCard, self.PublicCard, max([10,self.minBet]))
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
@@ -166,13 +165,11 @@ class Game(object):
 
         elif self.state == 'River':
             # Bet not over, continue to add
-            print(1)
             if not self.Dealer.over and not self.Player.over:
-                print(2)
                 self.Player.action(action, self.Dealer.bet, bet)
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Player.over == False:
-                    self.Dealer.action(self.DealerCard, self.PublicCard, self.minBet)
+                    self.Dealer.action(self.DealerCard, self.PublicCard, max([10,self.minBet]))
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
@@ -198,9 +195,10 @@ class Game(object):
             PlayerCase = findMaxComb(self.PlayerCard + self.PublicCard)
             DealerCase = findMaxComb(self.DealerCard + self.PublicCard)
             if PlayerCase > DealerCase:
+                self.result = self.Pot
                 self.Player.coin += self.Pot
             elif PlayerCase < DealerCase:
-                pass 
+                self.result = -self.Pot
             else:
                 self.Player.coin += self.Pot / 2
             self.Pot = 0
