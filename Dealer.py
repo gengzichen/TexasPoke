@@ -7,6 +7,7 @@ class Dealer(object):
         self.bet = 0
         self.over = False
         self.giveup = False
+        self.message = ''
     def action(self, hands, public, minBet):
         self.hands=hands
         r = random.random()
@@ -47,22 +48,18 @@ class Dealer(object):
 
 
     def call(self, bet:int):
-        print('@@ BOT CALL')
+        self.message = 'Dealer called'
         self.bet += (bet - self.bet)
         self.over = True
     def fold(self):
-        print('@@ BOT FOLD')
+        self.message = 'Dealer folded! You won!'
         self.over = True
         self.giveup = True
 
     def minBet(self, bet:int):
-        print('@@ BOT MINBET', bet)
+        self.message = 'Dealer bet ' + str(bet)
         self.bet += bet
 
     def Bet(self, bet:int):
-        print('@@ BOT BET', bet)
+        self.message = 'Dealer bet ' + str(bet)
         self.bet += bet
-            
-    def allIn(self):
-        self.bet += self.coin
-        self.over = True

@@ -2,7 +2,7 @@ class UserAccount(object):
     def __init__(self, name, email, coin=1000) -> None:
         self.name = name
         self.email = email
-        self.coin = coin    
+        self.coin = coin
     def newPlayer(self):
         return Player(self.coin)
 
@@ -12,6 +12,7 @@ class Player(object):
         self.coin = coin
         self.bet = 0
         self.over = False
+        self.message = ''
     def action(self, act:str, minBet:int, bet:int):
         if act == 'call': self.call(minBet)
         if act == 'check': self.check()
@@ -23,22 +24,23 @@ class Player(object):
     def check(self):
         pass
     def call(self, bet:int):
-        print('@@ user call', (bet - self.bet))
+        self.message = 'You called'
         self.coin -= (bet - self.bet)
         self.bet += (bet - self.bet)
         self.over = True
     def fold(self):
+        self.message = 'You folded, dealer won'
         self.over = True
     def minBet(self, bet):
-        print('HERERE')
+        self.message = 'You bet ' + str(bet)
         if bet == 0: bet = 10
         self.coin -= bet
         self.bet += bet
     def Bet(self, bet):
-        print('@@ user bet', bet)
+        self.message = 'You bet ' + str(bet)
         self.coin -= bet
         self.bet += bet
     def allIn(self):
-        self.coin = 0
+        self.message = 'You put all in! No way back!'
         self.bet += self.coin
-        self.over = True
+        self.coin = 0

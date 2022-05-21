@@ -16,7 +16,7 @@ while(mygame.end==False):
     print('='*60)
     print('Your coin:', mygame.Player.coin)
     print('POT:', mygame.Pot)
-    print('Dealer Card:', [card.name for card in mygame.DealerCard], 'Dealer Bet:', mygame.Dealer.bet)
+    print('Dealer Card:', ['unknown', 'unknown'], 'Dealer Bet:', mygame.Dealer.bet)
     if len(mygame.PublicCard) != 0:
         print('Plublic Card:', [card.name for card in mygame.PublicCard])
     print('Your Card:', [card.name for card in mygame.PlayerCard], 'Player Bet:', mygame.Player.bet)
@@ -34,6 +34,8 @@ while(mygame.end==False):
     if len(input_action) > 1:
         bet = int(input_action[1])
     mygame.play(action=act, bet = bet)
+    if mygame.Player.message != '': print( mygame.Player.message)
+    if mygame.Dealer.message != '': print( mygame.Dealer.message)
 
 print('='*60)
 print('Your coin:', mygame.Player.coin)

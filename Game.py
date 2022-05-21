@@ -18,7 +18,7 @@ class Game(object):
         self.Pot = 0
         self.end = False
         self.state = 'Blind'
-        self.minBet = 0
+        self.minBet = 10
 
 
         self.Deck = Deck()
@@ -52,7 +52,6 @@ class Game(object):
             self.actions = ['fold', 'call', 'minBet', 'allIn', 'bet']
     def give_up(self):
         # if dealer fold:
-        print('Bot folded, you won')
         self.result = self.Player.bet + self.Dealer.bet + self.Pot
         self.Player.coin += self.Player.bet + self.Dealer.bet + self.Pot
         self.Pot = 0
@@ -83,6 +82,8 @@ class Game(object):
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
+                else:
+                    self.Dealer.message = ''
 
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Dealer.giveup: 
@@ -94,7 +95,7 @@ class Game(object):
                 self.Pot = self.Player.bet + self.Dealer.bet + self.Pot
                 self.Dealer.bet = 0
                 self.Player.bet = 0
-                self.minBet = 0
+                self.minBet = 10
 
                 if len(self.PublicCard)==0:
                     self.PublicCard = self.Deck.draw(3)
@@ -102,6 +103,10 @@ class Game(object):
                 self.Dealer.over = False
                 self.Player.over = False
             self.feasible_action()
+            if self.Player.coin < self.minBet or self.Player.coin == 0:
+                self.state = 'ShowHand'
+                self.actions = ['check']
+
 
         elif self.state == 'Flop':
             # Bet not over, continue to add
@@ -113,6 +118,8 @@ class Game(object):
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
+                else:
+                    self.Dealer.message = ''
 
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Dealer.giveup: 
@@ -124,7 +131,7 @@ class Game(object):
                 self.Pot = self.Player.bet + self.Dealer.bet + self.Pot
                 self.Dealer.bet = 0
                 self.Player.bet = 0
-                self.minBet = 0
+                self.minBet = 10
 
                 if len(self.PublicCard)==3:
                     self.PublicCard += self.Deck.draw(1)
@@ -132,6 +139,9 @@ class Game(object):
                 self.Dealer.over = False
                 self.Player.over = False
             self.feasible_action()
+            if self.Player.coin < self.minBet or self.Player.coin == 0:
+                self.state = 'ShowHand'
+                self.actions = ['check']
 
         elif self.state == 'Turn':
             # Bet not over, continue to add
@@ -143,6 +153,8 @@ class Game(object):
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
+                else:
+                    self.Dealer.message = ''
 
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Dealer.giveup: 
@@ -154,7 +166,7 @@ class Game(object):
                 self.Pot = self.Player.bet + self.Dealer.bet + self.Pot
                 self.Dealer.bet = 0
                 self.Player.bet = 0
-                self.minBet = 0
+                self.minBet = 10
 
                 if len(self.PublicCard)==4:
                     self.PublicCard += self.Deck.draw(1)
@@ -162,6 +174,9 @@ class Game(object):
                 self.Dealer.over = False
                 self.Player.over = False
             self.feasible_action()
+            if self.Player.coin < self.minBet or self.Player.coin == 0:
+                self.state = 'ShowHand'
+                self.actions = ['check']
 
         elif self.state == 'River':
             # Bet not over, continue to add
@@ -173,6 +188,8 @@ class Game(object):
                     # force bet to end if not enough money
                     if self.Player.coin < self.Dealer.bet:
                         self.Dealer.call(self.Player.bet)
+                else:
+                    self.Dealer.message = ''
 
                 self.minBet = max([self.Player.bet, self.Dealer.bet])
                 if self.Dealer.giveup: 
@@ -184,14 +201,20 @@ class Game(object):
                 self.Pot = self.Player.bet + self.Dealer.bet + self.Pot
                 self.Dealer.bet = 0
                 self.Player.bet = 0
-                self.minBet = 0
+                self.minBet = 10
 
                 self.state = 'ShowHand'
                 self.Dealer.over = False
                 self.Player.over = False
             self.feasible_action()
+            if self.Player.coin < self.minBet or self.Player.coin == 0:
+                self.state = 'ShowHand'
+                self.actions = ['check']
 
         elif self.state == 'ShowHand':
+            if len(self.PublicCard) < 5:
+                self.PublicCard += self.Deck.draw(5-len(self.PublicCard))
+
             PlayerCase = findMaxComb(self.PlayerCard + self.PublicCard)
             DealerCase = findMaxComb(self.DealerCard + self.PublicCard)
             if PlayerCase > DealerCase:
