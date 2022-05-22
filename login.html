@@ -19,33 +19,30 @@
 
 </head>
 
-<body>
-
+<body style="background: linear-gradient(200deg,#76f496,#00553bcb);">
     <div class="container">
-        <h1 class="mt-5">Login</h1>
-        <form method="post" id="text" >
-            <div class="row">
-                <label for="login_username" class="offset-3 col-2 col-form-label">Username</label>
-                <div class="col-4">
-                    <input type="text" name="username" id="login_username" class="form-control">
+        <h1 class="mt-5">Let's Start Game</h1>
+        
+        <form method="post">
+            <div id="text">
+                <div class="row mb-3">
+                    <label for="login_username" class="col-form-label" style="color:white">Username</label>
+                    <input type="text" name="username" id="login_username" class="form-control" style="background: rgba(0, 0, 0, 0);color: #FFFFFF;">
                 </div>
-                <button type="button" class="btn btn-outline-light" style="width:100px" data-bs-toggle="modal"
-                    data-bs-target="#register">register
-                </button>
-            </div>
-            <div class="row">
-                <label for="login_password" class="offset-3 col-2 col-form-label">Password</label>
-                <div class="col-4">
-                    <input type="password" name="password" id="login_password" class="form-control">
+                <div class="row mb-3">
+                    <label for="login_password" class="col-form-label" style="color:white">Password</label>
+                    <input type="password" name="password" id="login_password" class="form-control" style="background: rgba(0, 0, 0, 0);color: #FFFFFF;">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-outline-light" style="width:30%" id="Login">Play</button>
+                    <button type="button" class="btn btn-outline-light" style="width:30%" data-bs-toggle="modal"
+                        data-bs-target="#register">register
+                    </button>
+                    <div style="text-align:center">{{error}}</div>
                 </div>
             </div>
-            <br>
-            <div class="row">
-                <button type="submit" class="btn btn-outline-light offset-3 col-6">Play</button>
-                <div style="text-align:center">{{error}}</div>
-            </div>
-
         </form>
+        
     </div>
 
     <div class="modal fade" id="register" tabindex="-1" aria-labelledby="register" aria-hidden="true">
@@ -57,19 +54,17 @@
                 </div>
                 <form method="post" action="/register">
                     <div class="modal-body">
-                        
-                            <div class="container-fluid">
-                                <label class="col-form-label" for="username">Username</label>
-                                <input class="form-control" type="text" id="username" name="username" placeholder="Username"
-                                    required>
-                                <label class="col-form-label" for="password">Password</label>
-                                <input class="form-control" type="password" id="password" name="password" required>
-                            </div>
-                        
+                        <div class="container-fluid">
+                            <label class="col-form-label" for="username">Username</label>
+                            <input class="form-control" type="text" id="username" name="username" placeholder="Please enter your Username"
+                                required>
+                            <label class="col-form-label" for="password">Password</label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Please enter more than 8 number or letter">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Register</button>
+                        <button type="submit" class="btn btn-primary" id="Register">Register</button>
                     </div>
                 </form>
 
